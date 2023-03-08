@@ -1,0 +1,77 @@
+
+.repository{
+  width:200px;
+  height: 30px;
+  border-radius: 10px;
+  margin-left: 180px;
+}
+.form{
+  margin-left: 25%;
+  margin-top: 5%;
+  width:600px;
+  height:500px;
+  background-color:bisque;
+  border-radius: 20px;
+  align-items: center;
+}
+.dlmsg{
+  text-align: center;
+}
+.title{
+  text-align: center;
+  margin-top: 20px;
+}
+.user{
+  margin-top: 60px;
+  margin-left: 180px;
+width:200px;
+height:30px;
+border-radius: 10px;
+}
+.repo{
+width:150px;
+height: 40px;
+font-size: 18px;
+margin-left: 190px;
+border-radius: 10px;
+cursor: pointer;
+}
+.branch{
+margin-left: 180px;
+width:200px;
+height:30px;
+border-radius: 10px;
+}
+.download{
+margin-left: 200px;
+margin-top: 10px;
+width: 150px;
+height:40px;
+border-radius: 10px;
+font-size: 16px;
+cursor: pointer;
+}
+.profile{
+  margin-left: 25%;
+  margin-top: 2%;
+}
+
+.login{
+  margin-left: 25%;
+  margin-top: 10%;
+  width: 150px;
+  height:50px;
+  border-radius: 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.logout{
+  margin-left: 90%;
+  margin-top: 2%;
+  width: 100px;
+  height:50px;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor:pointer;
+}
