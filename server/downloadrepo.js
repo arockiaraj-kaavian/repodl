@@ -10,9 +10,9 @@ const octokit = new Octokit({
     auth: `${gitToken}`
   });
   
-
+let repo=reponame;
  
-var targetProjectRoot = "C:/data/target/"
+var targetProjectRoot = `C:/data/repos/${repo}/`
 const github = { "owner": username, "repo": reponame, "branch":branch }
  
 downloadGitHubRepo(github, targetProjectRoot)
@@ -22,8 +22,8 @@ async function downloadGitHubRepo(github, targetDirectory) {
     var repo = github.repo;
     var path = '';
     var owner = github.owner;
-    var ref = github.commit ? github.commit : (github.tag ? github.tag : (github.branch ? github.branch :'master'))
-    processGithubDirectory(owner, repo, ref, path, path, targetDirectory)
+    var ref = github.commit ? github.commit : (github.tag ? github.tag : (github.branch ? github.branch :'master'));
+    processGithubDirectory(owner, repo, ref, path, path, targetDirectory);
 }
  
 // let's assume that if the name ends with one of these extensions, we are dealing with a binary file:

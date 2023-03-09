@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const {downloadrepo} = require("./downloadrepo");
+const { downloadrepo } = require("./downloadrepo");
 
-const { Octokit } = require("@octokit/rest","@octokit/core");
+// const { orgrepos } = require('./orgrepos');
+
+// const {userrepos} = require('./userrepos');
+const { Octokit } = require("@octokit/rest", "@octokit/core");
 
 
+const request = require('request');
 const Bottleneck = require('bottleneck');
 
 
@@ -15,7 +19,7 @@ const limiter = new Bottleneck({
 
 
 const fetch = (...args) =>
-import("node-fetch").then(({ default: fetch }) => fetch(...args));
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -36,6 +40,7 @@ app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(bodyparser.json());
 mongoose.connect("mongodb+srv://yellowTeam:5ALD0k69147PSvF3@db-kaavian-sys-cluster-in1-966a0c87.mongo.ondigitalocean.com/yellowDB?tls=true&authSource=admin&replicaSet=db-kaavian-sys-cluster-in1");
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
@@ -46,12 +51,42 @@ db.once("open", function () {
 //   res.redirect(url);
 // })
 
+app.post('/orgrepos',async(req,res) =>{
 
-app.post('/repos',async(req,res)=>{
-  const{username,token}=req.body;
-  console.log(username,token);
+  const{orgname,token} = req.body;
+  console.log(orgname,token);
 
+  const Token = `${token}`; 
+
+  const octokit = new Octokit({
+    auth: `${Token}`
+  });
+
+
+  let repos;
+  async function getRepoNamesForOrg(orgname) {
+    const { data } = await octokit.repos.listForOrg({
+      username: orgname,
+      visibility: "private",
+    });
+
+    const repoNames = data.map((repo) => repo.name);
+    return repoNames;
+  }
+  getRepoNamesForOrg(orgname).then((repoNames) => {
+    
+    repos = repoNames;
+    res.json(repos);
+
+  });
+});
+
+app.post('/userepos', async(req, res) => {
+
+  const { username, token } = req.body;
+  console.log(username, token);
   const gitToken = token;
+
 
   const octokit = new Octokit({
     auth: `${gitToken}`
@@ -59,29 +94,32 @@ app.post('/repos',async(req,res)=>{
 
 
   let repos;
-  async function getPrivateRepoNamesForUser(username){
+  async function getRepoNamesForUser(username) {
     const { data } = await octokit.repos.listForUser({
       username: username,
       visibility: "private",
     });
-  
+
     const repoNames = data.map((repo) => repo.name);
     return repoNames;
   }
-  getPrivateRepoNamesForUser(username).then((repoNames) => {
-        // res.json(repoNames)
-        repos=repoNames;
-        res.json(repos);
-    });
-})
+  getRepoNamesForUser(username).then((repoNames) => {
+    
+    repos = repoNames;
+    res.json(repos);
 
-app.post('/repodownload',async(req,res)=>{
+  });
+  
+  
+});
 
-  const{username,reponame,token,branch}=req.body;
+app.post('/repodownload', async (req, res) => {
 
-  console.log(username,reponame,token,branch)
+  const { username, reponame, token, branch } = req.body;
 
-  downloadrepo(username,reponame,token,branch);
+  console.log(username, reponame, token, branch)
+
+  downloadrepo(username, reponame, token, branch);
 
 });
 
@@ -103,14 +141,14 @@ app.get("/getAccessToken", async (req, res) => {
     clientSecret +
     "&code=" +
     req.query.code;
-  await fetch("https://github.com/login/oauth/access_token" + params,{
+  await fetch("https://github.com/login/oauth/access_token" + params, {
     method: "post",
     headers: {
       Accept: "application/json",
     },
   })
     .then((res) => {
-       return res.json();
+      return res.json();
     })
     .then((data) => {
       res.json(data);
