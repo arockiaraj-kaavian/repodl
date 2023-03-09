@@ -1,9 +1,9 @@
 
 .repository{
-  width:200px;
-  height: 30px;
+  width:260px;
+  height: 40px;
   border-radius: 10px;
-  margin-left: 180px;
+  margin-left: 150px;
 }
 .form{
   margin-left: 25%;
@@ -22,23 +22,39 @@
   margin-top: 20px;
 }
 .user{
-  margin-top: 60px;
-  margin-left: 180px;
-width:200px;
+  margin-top: 40px;
+  margin-left: 150px;
+width:250px;
 height:30px;
 border-radius: 10px;
 }
+.org{
+  margin-left: 150px;
+  width:250px;
+  height:30px;
+  border-radius: 10px;
+}
 .repo{
-width:150px;
+width:120px;
 height: 40px;
-font-size: 18px;
-margin-left: 190px;
+font-size: 14px;
+margin-left: 150px;
 border-radius: 10px;
 cursor: pointer;
 }
+
+.orgrepo{
+  width:120px;
+  height: 40px;
+  font-size: 14px;
+  margin-left: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  }
+
 .branch{
-margin-left: 180px;
-width:200px;
+margin-left:150px;
+width:250px;
 height:30px;
 border-radius: 10px;
 }
