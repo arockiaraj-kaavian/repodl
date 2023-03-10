@@ -9,13 +9,14 @@ const { Octokit } = require("@octokit/rest", "@octokit/core");
 
 
 const request = require('request');
-const Bottleneck = require('bottleneck');
+
+// const Bottleneck = require('bottleneck');
 
 
-const limiter = new Bottleneck({
-  maxConcurrent: 1, // Maximum number of requests/functions to execute concurrently
-  minTime: 1000 // Minimum time to wait between requests/functions (in milliseconds)
-});
+// const limiter = new Bottleneck({
+//   maxConcurrent: 1, // Maximum number of requests/functions to execute concurrently
+//   minTime: 1000 // Minimum time to wait between requests/functions (in milliseconds)
+// });
 
 
 const fetch = (...args) =>
@@ -56,70 +57,65 @@ app.post('/orgrepos',async(req,res) =>{
   const{orgname,token} = req.body;
   console.log(orgname,token);
 
-  const Token = `${token}`; 
-
-  const octokit = new Octokit({
-    auth: `${Token}`
-  });
-
-
-  let repos;
-  async function getRepoNamesForOrg(orgname) {
-    const { data } = await octokit.repos.listForOrg({
-      username: orgname,
-      visibility: "private",
-    });
-
-    const repoNames = data.map((repo) => repo.name);
-    return repoNames;
+  const accessToken = `${token}`;
+  const organization = `${orgname}`;
+const options = {
+  url: `https://api.github.com/orgs/${organization}/repos`,
+  headers: {
+    'User-Agent': 'request',
+    Authorization: `token ${accessToken}`
   }
-  getRepoNamesForOrg(orgname).then((repoNames) => {
-    
-    repos = repoNames;
+};
+request(options, (error, response, body) => {
+  if (!error && response.statusCode == 200) {
+    const repositories = JSON.parse(body);
+    const repositoryNames = repositories.map(repo => repo.name);
+    const repos=repositoryNames;
+    console.log(repos);
     res.json(repos);
+  } else {
+    console.error(error);
+  }
+});
 
-  });
 });
 
 app.post('/userepos', async(req, res) => {
 
   const { username, token } = req.body;
   console.log(username, token);
-  const gitToken = token;
+  
+  const accessToken = `${token}`;
+  const user = `${username}`;
 
-
-  const octokit = new Octokit({
-    auth: `${gitToken}`
-  });
-
-
-  let repos;
-  async function getRepoNamesForUser(username) {
-    const { data } = await octokit.repos.listForUser({
-      username: username,
-      visibility: "private",
-    });
-
-    const repoNames = data.map((repo) => repo.name);
-    return repoNames;
+  const options = {
+  url: `https://api.github.com/users/${user}/repos`,
+  headers: {
+    'User-Agent': 'request',
+    Authorization: `token ${accessToken}`
   }
-  getRepoNamesForUser(username).then((repoNames) => {
-    
-    repos = repoNames;
+};
+  request(options, (error, response, body) => {
+  if (!error && response.statusCode == 200) {
+    const repositories = JSON.parse(body);
+    const repositoryNames = repositories.map(repo => repo.name);
+    const repos=repositoryNames;
+    console.log(repos);
     res.json(repos);
+  } else {
+    console.error(error);
+  }
+});
 
-  });
-  
-  
 });
 
 app.post('/repodownload', async (req, res) => {
 
   const { username, reponame, token, branch } = req.body;
 
-  console.log(username, reponame, token, branch)
+  console.log(username,reponame, token, branch)
 
-  downloadrepo(username, reponame, token, branch);
+  downloadrepo(username,reponame, token, branch);
 
 });
 

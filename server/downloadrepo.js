@@ -1,5 +1,5 @@
 
-function downloadrepo(username,reponame,token,branch){
+function downloadrepo(username, reponame,token,branch){
 const { Octokit } = require('@octokit/rest', '@octokit/core');
 const fs = require('fs');
 
@@ -9,11 +9,9 @@ const gitToken=token;
 const octokit = new Octokit({
     auth: `${gitToken}`
   });
-  
-let repo=reponame;
  
-var targetProjectRoot = `C:/data/repos/${repo}/`
-const github = { "owner": username, "repo": reponame, "branch":branch }
+var targetProjectRoot = `C:/Users/USER/Downloads/${reponame}/`
+const github = { "owner": username,"repo": reponame, "branch":branch }
  
 downloadGitHubRepo(github, targetProjectRoot)
  
