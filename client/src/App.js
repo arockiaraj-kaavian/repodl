@@ -130,12 +130,16 @@ function App() {
 
               <option>select the repo name </option>
               {data ? data.map((repos) => (
-                <option>{repos}</option>)) : orgrepos ? orgrepos.map((repo)=>(
-                  <option>{repo}</option>)) : " " }
+                <option>{repos}</option>)): 
+                orgrepos ? orgrepos.map((repo)=>(
+                  <option>{repo}</option>)):""}
               
             </select> <br /><br />
-            <input type='text' className='branch' placeholder='Enter the branch name' value={branch} onChange={e => setBranch(e.target.value)} />
-            <br /><br />
+            <select className='branch'  value={branch} onChange={e => setBranch(e.target.value)} >
+              <option>select the branch name</option>
+              <option>main</option>
+              <option>master</option>
+            </select> <br /><br />
             <button className='download' onClick={download}>Download repo</button> <br /> <br />
           </div>
           {Object.keys(userdata).length !== 0 ?

@@ -1,26 +1,17 @@
-function orgrepos(username,token){
-
-const request = require('request');
-
-const org = `${orgname}`;  // Replace with your organization name
-const Token = `${token}`;   // Replace with your OAuth token
-
+const accessToken = 'YOUR_ACCESS_TOKEN';
 const options = {
-  url: `https://api.github.com/orgs/${org}/repos`,
+  url: 'https://api.github.com/orgs/YOUR_ORGANIZATION_NAME/repos',
   headers: {
     'User-Agent': 'request',
-    'Authorization': `token ${Token}`
+    Authorization: `token ${accessToken}`
   }
 };
-
 request(options, (error, response, body) => {
   if (!error && response.statusCode == 200) {
-    const repos = JSON.parse(body);
-    console.log(repos,'repos');
-     return repos;
+    const repositories = JSON.parse(body);
+    const repositoryNames = repositories.map(repo => repo.name);
+    console.log(repositoryNames);
   } else {
-    console.log(error);
+    console.error(error);
   }
 });
-}
-module.exports={orgrepos}

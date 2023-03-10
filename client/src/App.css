@@ -1,10 +1,5 @@
 
-.repository{
-  width:260px;
-  height: 40px;
-  border-radius: 10px;
-  margin-left: 150px;
-}
+
 .form{
   margin-left: 25%;
   margin-top: 5%;
@@ -51,11 +46,17 @@ cursor: pointer;
   border-radius: 10px;
   cursor: pointer;
   }
+  .repository{
+    width:260px;
+    height: 35px;
+    border-radius: 10px;
+    margin-left: 150px;
+  }
 
 .branch{
 margin-left:150px;
-width:250px;
-height:30px;
+width:260px;
+height:35px;
 border-radius: 10px;
 }
 .download{
