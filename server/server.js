@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { downloadrepo } = require("./downloadrepo");
-
+const { downloadorgrepo } = require('./orgrepodl');
 // const { orgrepos } = require('./orgrepos');
 
 // const {userrepos} = require('./userrepos');
@@ -40,91 +40,101 @@ const bodyparser = require("body-parser");
 app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(bodyparser.json());
-mongoose.connect("mongodb+srv://yellowTeam:5ALD0k69147PSvF3@db-kaavian-sys-cluster-in1-966a0c87.mongo.ondigitalocean.com/yellowDB?tls=true&authSource=admin&replicaSet=db-kaavian-sys-cluster-in1");
-
+mongoose.connect("mongodb://localhost:27017/Taas");
 const db = mongoose.connection;
+
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("DB Connected successfully");
 });
+
 // app.get('/login',async(req,res)=>{
 //   const url=`https://github.com/login/oauth/authorize?client_id=${clientId}`;
 //   res.redirect(url);
 // })
 
-app.post('/orgrepos',async(req,res) =>{
+app.post('/orgrepos', async (req, res) => {
 
-  const{orgname,token} = req.body;
-  console.log(orgname,token);
+  const { orgname, token } = req.body;
+  console.log(orgname, token);
 
   const accessToken = `${token}`;
   const organization = `${orgname}`;
-const options = {
-  url: `https://api.github.com/orgs/${organization}/repos`,
-  headers: {
-    'User-Agent': 'request',
-    Authorization: `token ${accessToken}`
-  }
-};
-request(options, (error, response, body) => {
-  if (!error && response.statusCode == 200) {
-    const repositories = JSON.parse(body);
-    const repositoryNames = repositories.map(repo => repo.name);
-    const repos=repositoryNames;
-    console.log(repos);
-    res.json(repos);
-  } else {
-    console.error(error);
-  }
-});
+  const options = {
+    url: `https://api.github.com/orgs/${organization}/repos`,
+    headers: {
+      'User-Agent': 'request',
+      Authorization: `token ${accessToken}`
+    }
+  };
+  request(options, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      const repositories = JSON.parse(body);
+      const repositoryNames = repositories.map(repo => repo.name);
+      const repos = repositoryNames;
+      console.log(repos);
+      res.json(repos);
+    } else {
+      console.error(error);
+    }
+  });
 
 });
 
-app.post('/userepos', async(req, res) => {
+app.post('/userepos', async (req, res) => {
 
   const { username, token } = req.body;
   console.log(username, token);
-  
+
   const accessToken = `${token}`;
   const user = `${username}`;
 
   const options = {
-  url: `https://api.github.com/users/${user}/repos`,
-  headers: {
-    'User-Agent': 'request',
-    Authorization: `token ${accessToken}`
-  }
-};
+    url: `https://api.github.com/users/${user}/repos`,
+    headers: {
+      'User-Agent': 'request',
+      Authorization: `token ${accessToken}`
+    }
+  };
   request(options, (error, response, body) => {
-  if (!error && response.statusCode == 200) {
-    const repositories = JSON.parse(body);
-    const repositoryNames = repositories.map(repo => repo.name);
-    const repos=repositoryNames;
-    console.log(repos);
-    res.json(repos);
-  } else {
-    console.error(error);
-  }
+    if (!error && response.statusCode == 200) {
+      const repositories = JSON.parse(body);
+      const repositoryNames = repositories.map(repo => repo.name);
+      const repos = repositoryNames;
+      console.log(repos);
+      res.json(repos);
+    } else {
+      console.error(error);
+    }
+  });
+
 });
+app.post('/orgrepoget', async (req, res) => {
+
+  const { orgname, reponame, token, branch } = req.body;
+
+  console.log(orgname, reponame, token, branch);
+
+  downloadorgrepo(orgname, reponame, token, branch);
 
 });
 
-app.post('/repodownload', async (req, res) => {
+app.post('/userepoget', async (req, res) => {
 
   const { username, reponame, token, branch } = req.body;
 
-  console.log(username,reponame, token, branch)
+  console.log(username, reponame, token, branch)
 
-  downloadrepo(username,reponame, token, branch);
+  downloadrepo(username, reponame, token, branch);
 
 });
 
 // store the token in database
-// app.post("/intoken", async (req, res) => {
-//   const { codeparams } = req.body;
-//   console.log(codeparams);
-//   await Tokens.create({ Token: codeparams });
-// });
+app.post("/intoken", async (req, res) => {
+  const { token } = req.body;
+  console.log(token);
+  await Tokens.create({ Token: token });
+});
 
 
 
