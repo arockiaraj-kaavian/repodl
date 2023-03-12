@@ -52,10 +52,9 @@ function App() {
 
 
   function download() {
-
-    // window.location.assign(`https://github.com/login/oauth/authorize?client_id=${clientId}`);
+    if(username && reponame && token && branch){
     console.log(username, reponame, token, branch);
-    fetch("http://localhost:3001/repodownload", {
+    fetch("http://localhost:3001/userepoget", {
       method: "post",
       body: JSON.stringify({ username, reponame, token, branch }),
       headers: {
@@ -65,18 +64,36 @@ function App() {
       res.json();
     }).then((data) => {
       console.log(data);
-    })
-    console.log('repo downloaded successfully');
-
+    });
+    console.log('user repo downloaded successfully');
     setUsername('');
+    setReponame('');
+    setBranch('');
+  }
+    else if(orgname && reponame && token && branch) {
+    console.log(orgname,reponame,token,branch);
+    fetch("http://localhost:3001/orgrepoget", {
+      method: "post",
+      body: JSON.stringify({ orgname, reponame, token, branch }),
+      headers: { 
+        "content-type": "application/json"
+      }
+    }).then((res) => {
+      res.json();
+    }).then((data) => {
+      console.log(data);
+    })
+    console.log('organization repo downloaded successfully');
+  }
+    setOrgname('');
     setReponame('');
     setBranch('');
   }
 
 
   function getrepo() {
-
-    
+      setReponame('');
+      if(username && token){
       console.log(username, token);
       fetch("http://localhost:3001/userepos", {
         method: "post",
@@ -89,8 +106,8 @@ function App() {
           setData(data);
 
         })
-  }
-    function getorgrepo(){
+  
+      }else {
       console.log(orgname, token);
       fetch("http://localhost:3001/orgrepos", {
         method: "post",
@@ -101,9 +118,13 @@ function App() {
       }).then((res) => res.json())
         .then((data) => {
           setOrgrepos(data);
+          console.log(data);
         })
+      
+      }
     
       }
+      
 
   function githublogin() {
 
@@ -122,9 +143,8 @@ function App() {
             <h2 className='title'>Get user data from github</h2>
             <input type='text' className='user' placeholder='Enter github username' value={username} onChange={e => setUsername(e.target.value)} /><br /><br />
             <input type='text' className='org' placeholder='Enter orgname' value={orgname} onChange={e => setOrgname(e.target.value)} /><br /><br />
-            <button className='repo' onClick={getrepo}>Get user repos</button>
+            <button className='repo' onClick={getrepo}>Get repos</button>
 
-            <button className='orgrepo' onClick={getorgrepo}>Get org repos</button><br/><br/>
 
             <select className='repository' value={reponame} onChange={e => setReponame(e.target.value)}>
 
