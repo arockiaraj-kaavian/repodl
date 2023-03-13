@@ -1,0 +1,13 @@
+name: Docker Series Builds
+
+on:[push]
+
+jobs:
+build:
+runs-on: windows-latest
+steps:
+-uses: actions/checkout@v2
+-name: docker-login
+env:
+DOCKER_USER: ${{secrets.DOCKER_USER}}:
+DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}:
