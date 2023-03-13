@@ -8,6 +8,14 @@ runs-on: windows-latest
 steps:
 -uses: actions/checkout@v2
 -name: docker-login
+
+run: echo Hello,world!
+-name: Run a multiline script
+run: |
+      echo Add other actions to build,
+      echo test,and deploy your project.
 env:
 DOCKER_USER: ${{secrets.DOCKER_USER}}:
 DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}:
+
+
