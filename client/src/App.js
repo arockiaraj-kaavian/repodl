@@ -140,8 +140,9 @@ function App() {
             Log out
           </button>
           <div className='form'>
-            <h2 className='title'>Get user data from github</h2>
-            <input type='text' className='user' placeholder='Enter github username' value={username} onChange={e => setUsername(e.target.value)} /><br /><br />
+            <h2 className='title'>Get user repo from github</h2>
+            <input type='text' className='user' placeholder='Enter github username' value={username} onChange={e => setUsername(e.target.value)} /><br />
+            <h3 style={{marginLeft:'250px'}}>OR</h3>
             <input type='text' className='org' placeholder='Enter orgname' value={orgname} onChange={e => setOrgname(e.target.value)} /><br /><br />
             <button className='repo' onClick={getrepo}>Get repos</button>
 

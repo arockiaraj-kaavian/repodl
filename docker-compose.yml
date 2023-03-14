@@ -1,0 +1,12 @@
+version: '20'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: autobuildreactapp
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm start
